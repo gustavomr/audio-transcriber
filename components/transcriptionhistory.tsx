@@ -30,10 +30,11 @@ interface TranscriptionHistoryProps {
 export default function TranscriptionHistory({ transcriptions, onSelect, getAllAudiosByUser }: TranscriptionHistoryProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const { getToken} = useAuth();
+  const { getToken } = useAuth();
   const { isLoaded, isSignedIn, user } = useUser();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const getStatusIcon = (status: Transcription['status']) => {
     switch (status) {
@@ -59,15 +60,14 @@ export default function TranscriptionHistory({ transcriptions, onSelect, getAllA
   };
 
   useEffect(() => {
-      const fetchCount = async () => {
-        setLoading(true)
-        const count = await handleCountPages();
-        setTotalCount(count);
-        await getAllAudiosByUser(0, itemsPerPage);
-        setLoading(false)
-      };
-      fetchCount();
-    
+    const fetchCount = async () => {
+      setLoading(true);
+      const count = await handleCountPages();
+      setTotalCount(count);
+      await getAllAudiosByUser(0, itemsPerPage);
+      setLoading(false);
+    };
+    fetchCount();
   }, []);
 
   const totalPages = Math.ceil(totalCount / itemsPerPage);
@@ -98,109 +98,105 @@ export default function TranscriptionHistory({ transcriptions, onSelect, getAllA
     setLoading(false);
   };
 
+  const handleSelect = (id: number) => {
+    setSelectedId(id);
+    const selectedTranscription = transcriptions.find(item => item.id === id);
+    if (selectedTranscription) {
+      onSelect(selectedTranscription);
+    }
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <div className="flex items-center">
         <h2 className="text-m font-semibold">Transcriptions History</h2>
         {loading && (
-          <div className="ml-2 flex justify-center items-center"> {/* Margin to space the loader from the heading */}
+          <div className="ml-2 flex justify-center items-center">
             <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
           </div>
         )}
       </div>
-      <div className="space-y-3">
-     
+      <div className="space-y-2">
         {transcriptions?.map((item) => (
-          
           <div
             key={String(item.id)}
-            onClick={() => onSelect(item)}
-            className="p-4 bg-white rounded-lg shadow-sm border border-gray-100 hover:border-blue-200 cursor-pointer transition-all"
+            onClick={() => handleSelect(item.id)}
+            className={`flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100 cursor-pointer transition-all ${selectedId === item.id ? 'border-blue-400' : 'hover:border-blue-200'}`}
           >
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                
-                <div>
-                  <h3 className="font-medium">{item.filename}</h3>
-                  <p className="text-sm text-gray-500">
-                    {new Date(item.createdAt).toLocaleDateString()} at {new Date(item.createdAt).toLocaleTimeString()}
-                  </p>
-                </div>
-              </div>
-              <div className='flex-1 max-w-[200px]'>
-                <AudioPlayer 
-                  showJumpControls={false}
-                  showDownloadProgress={false}
-                  layout='horizontal-reverse'
-                  src={item.url}
-                  customControlsSection={[ RHAP_UI.MAIN_CONTROLS ]}
-                  customProgressBarSection={[]}
-                  customVolumeControls={[]}
-                  className="audio-player-minimal"
-                />
-              </div>
-              <div className="p-1 bg-gray-50 rounded-full">
-                  <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> {getStatusIcon(item.status)}</TooltipTrigger>
-                    <TooltipContent>
-                      <p> {item.status}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  </TooltipProvider>
-              </div>
+            <div className='p-1'>
+              <AudioPlayer
+                showJumpControls={false}
+                showDownloadProgress={false}
+                layout='horizontal-reverse'
+                src={item.url}
+                customControlsSection={[RHAP_UI.MAIN_CONTROLS]}
+                customProgressBarSection={[]}
+                customVolumeControls={[]}
+                className="audio-player-minimal"
+              />
+            </div>
+            <div className="flex-1 ml-1">
+              <h3 className="font-medium">{item.filename}</h3>
+              <p className="text-sm text-gray-500">
+                {new Date(item.createdAt).toLocaleDateString()} at {new Date(item.createdAt).toLocaleTimeString()}
+              </p>
+            </div>
+            <div className="p-1 bg-gray-50 rounded-full">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>{getStatusIcon(item.status)}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>{item.status}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
-          
         ))}
 
-{totalPages > 1 && (
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious 
-                href="#" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  handlePreviousPage();
-                }}
-                className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
-              />
-            </PaginationItem>
-            
-            {[...Array(totalPages)].map((_, index) => (
-              <PaginationItem key={index + 1}>
-                <PaginationLink 
+        {totalPages > 1 && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    handlePageSelect(index + 1);
+                    handlePreviousPage();
                   }}
-                  className={currentPage === index + 1 ? 'bg-blue-50' : ''}
-                >
-                  {index + 1}
-                </PaginationLink>
+                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                />
               </PaginationItem>
-            ))}
 
-            <PaginationItem>
-              <PaginationNext 
-                href="#" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNextPage();
-                }}
-                className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+              {[...Array(totalPages)].map((_, index) => (
+                <PaginationItem key={index + 1}>
+                  <PaginationLink
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageSelect(index + 1);
+                    }}
+                    className={currentPage === index + 1 ? 'bg-blue-50' : ''}
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNextPage();
+                  }}
+                  className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         )}
-
       </div>
-
-      
     </div>
   );
 }
