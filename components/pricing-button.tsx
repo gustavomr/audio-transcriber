@@ -42,15 +42,12 @@ export function PricingButton() {
       onClick={handleSubscribe}
       disabled={loading}
       variant="outline"
-      className="bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700"
+      className="flex items-center justify-center p-2 rounded-lg shadow-lg transition-transform transform hover:scale-105 bg-white border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
     >
       {loading ? (
-        <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Loading...
-        </>
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : (
-        'Buy Credits'
+        <span className="font-semibold">Buy Credits</span>
       )}
     </Button>
   );
