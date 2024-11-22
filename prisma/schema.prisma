@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Audio {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  filename     String   @db.VarChar(255)
+  length Decimal @db.Decimal(10,2)
+  audioPublicId String   @db.VarChar(255)
+  url String   @db.VarChar(255)
+  user    User @relation(fields: [userId], references: [clerkId])
+  userId String @db.VarChar(255)
+  transcription String? 
+  status  Status
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email String  @db.VarChar(255)
+  name  String  @db.VarChar(255)
+  imageUrl  String  @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  plan Plans
+  amount Decimal @db.Decimal(10,2)
+  clerkId String  @db.VarChar(255) @unique
+  audios Audio[]
+}
+
+enum Plans {
+  FREE
+  PAID
+}
+
+enum Status {
+  CREATED
+  QUEUED
+  INPROGRESS
+  DONE
+}
