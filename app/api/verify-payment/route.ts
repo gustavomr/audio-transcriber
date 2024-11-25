@@ -7,6 +7,8 @@ if (!process.env.STRIPE_SECRET_KEY) throw new Error("no key")
       apiVersion: '2024-11-20.acacia',
       typescript: true
   })
+  export { Stripe };
+
 
 export async function POST(req: Request) {
   const prisma = new PrismaClient();
