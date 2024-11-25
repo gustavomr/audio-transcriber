@@ -22,19 +22,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Get the price ID from the session
-    const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
-    const priceId = lineItems.data[0].price?.id;
-
-    // Define credits for each price tier
-    const creditsByPriceId: Record<string, number> = {
-      'price_1QNheYAJJQd7Uk6TIin2lJkf': 10,  // Replace with your actual price IDs and credit amounts
-    //  'price_yyyyy': 500,
-  //    'price_zzzzz': 1000,
-    };
-
-    const creditsToAdd = creditsByPriceId[priceId || ''] || 0;
-
+ 
     // Update user's credits in your database
     const user = await prisma.user.update({
       where: { clerkId: userId },
