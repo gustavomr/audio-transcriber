@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
       if (existingUser) {
 
-        const user = await prisma.user.update({
+        await prisma.user.update({
           where: {
             id: existingUser.id
           },
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
 
       } else {
    
-        const user = await prisma.user.create({
+       await prisma.user.create({
           data: {
           // id: evt.data.id,
             email: evt.data.email_addresses[0]?.email_address,

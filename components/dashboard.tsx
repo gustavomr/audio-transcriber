@@ -1,10 +1,10 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import FileUpload from '@/components/fileupload';
 import TranscriptionHistory, { Transcription } from '@/components/transcriptionhistory';
 import TranscriptionView from '@/components/transcriptionview';
 import { toast, Toaster } from 'react-hot-toast';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import { Status } from '@/components/transcriptionhistory';
 import { AssemblyAI } from 'assemblyai';
 import { User } from '@prisma/client';
