@@ -6,7 +6,6 @@ import {
   ClerkProvider
 } from '@clerk/nextjs'
 import { UserProvider } from "@/context/UserContext";
-import { Suspense } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,8 +31,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <UserProvider>
-      <Suspense>
-
+        
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -41,8 +39,6 @@ export default function RootLayout({
         <Header>{children}</Header>    
       </body>
     </html>
-    </Suspense>
-
     </UserProvider>
     </ClerkProvider>
   );
