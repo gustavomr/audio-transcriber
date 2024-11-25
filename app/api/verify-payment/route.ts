@@ -3,12 +3,14 @@ import Stripe from 'stripe';
 import { PrismaClient } from '@prisma/client'
 
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
-});
-
 export async function POST(req: Request) {
   const prisma = new PrismaClient();
+
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2024-11-20.acacia',
+  });
+  
   try {
     const { sessionId, userId } = await req.json();
     console.log(sessionId, userId)
