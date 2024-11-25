@@ -325,9 +325,9 @@ export default function Dashboard() {
         const updatedDbResponse2 = await updateDatabase(dbResponse.id, transcript?.text ? transcript?.text : "", "DONE");
         updateTranscriptionsList(updatedDbResponse2);
 
-      } catch (error) {
+      } catch (error : unknown) {
         console.error('Transcription error:', error);
-        toast.error(`Error transcribing audio: ${error.message}`);
+        toast.error(`Error transcribing audio: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
 
