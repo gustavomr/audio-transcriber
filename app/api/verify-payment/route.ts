@@ -33,7 +33,6 @@ export async function POST(req: Request) {
   //    'price_zzzzz': 1000,
     };
 
-    const creditsToAdd = creditsByPriceId[priceId || ''] || 0;
 
     // Update user's credits in your database
     const user = await prisma.user.update({
