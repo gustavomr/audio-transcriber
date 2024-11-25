@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Check, AlertCircle, Loader2 } from 'lucide-react';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './ui/pagination';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 export interface Transcription {
@@ -33,7 +33,6 @@ export default function TranscriptionHistory({ transcriptions, onSelect, getAllA
   const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState<number>(0);
   const { getToken } = useAuth();
-  const { isLoaded, isSignedIn, user } = useUser();
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const getStatusIcon = (status: Transcription['status']) => {
