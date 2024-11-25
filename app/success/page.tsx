@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { Loader2 } from "lucide-react";
@@ -65,18 +65,15 @@ export default function SuccessPage() {
 
   if (loading) {
     return (
-      <Suspense>
       <div className="min-h-screen flex flex-col items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
         <h1 className="mt-4 text-xl font-semibold">Processing your payment...</h1>
       </div>
-      </Suspense>
     );
   }
 
   if (error) {
     return (
-      <Suspense>
       <div className="min-h-screen flex flex-col items-center justify-center">
         <h1 className="text-xl font-semibold text-red-500">Error: {error}</h1>
         <button 
@@ -86,20 +83,18 @@ export default function SuccessPage() {
           Return to Dashboard
         </button>
       </div>
-      </Suspense>
 
     );
   }
 
   return (
-    <Suspense>
 
     <div className="min-h-screen flex flex-col items-center justify-center">
       <h1 className="text-2xl font-semibold text-green-500">Payment Successful!</h1>
       <p className="mt-2 text-gray-600">Your credits have been added to your account.</p>
       <p className="mt-4 text-sm text-gray-500">Redirecting to dashboard...</p>
     </div>
-          </Suspense>
+  
 
   );
 } 

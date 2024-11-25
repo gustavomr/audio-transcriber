@@ -29,7 +29,7 @@
     "react-dropzone": "^14.3.5",
     "react-h5-audio-player": "^3.9.3",
     "react-hot-toast": "^2.4.1",
-    "stripe": "^16.12.0",
+    "stripe": "^17.4.0",
     "svix": "^1.41.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7"
