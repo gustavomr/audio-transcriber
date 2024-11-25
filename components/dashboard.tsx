@@ -7,8 +7,8 @@ import { toast, Toaster } from 'react-hot-toast';
 import { useAuth } from '@clerk/nextjs';
 import { Status } from '@/components/transcriptionhistory';
 import { AssemblyAI } from 'assemblyai';
-import { User } from '@prisma/client';
 import { userContext } from '@/context/UserContext';
+import { User } from '@prisma/client';
 
 
 interface CloudinaryResponse {
