@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   if (req.method == 'GET') {
     //const userId = req.query.userId;
     const sub = await getSubFromToken(req.headers.authorization);
-
+    console.log("SUBBBB",sub)
     let db_response = await prisma.user.findFirst({
       where: {
         clerkId: sub
