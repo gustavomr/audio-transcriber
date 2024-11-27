@@ -29,7 +29,7 @@ interface TranscriptionHistoryProps {
 
 export default function TranscriptionHistory({ transcriptions, onSelect, getAllAudiosByUser }: TranscriptionHistoryProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = process.env.NEXT_PUBLIC_ITEMS_PER_PAGE;
+  const itemsPerPage = parseInt(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE || '4'); // Default to 10 if undefined
   const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState<number>(0);
   const { getToken } = useAuth();
