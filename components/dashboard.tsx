@@ -9,7 +9,7 @@ import { Status } from '@/components/transcriptionhistory';
 import { AssemblyAI } from 'assemblyai';
 import { userContext } from '@/context/UserContext';
 import { User } from '@prisma/client';
-
+import { uploadToCloudinary } from '@/services/cloudinaryService';
 
 interface CloudinaryResponse {
   duration: number;
@@ -68,26 +68,7 @@ export default function Dashboard() {
     }
   };
 
-  const uploadToCloudinary = async (file: File): Promise<CloudinaryResponse> => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", String(process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET));
-    formData.append("api_key", String(process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY));
-
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${String(process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME)}/auto/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error('Cloudinary upload failed');
-    }
-
-    return response.json();
-  };
+ 
 
   const getAllAudiosByUser = async (skip: number, take: number) => {
 
