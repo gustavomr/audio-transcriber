@@ -34,7 +34,6 @@ export default function Dashboard() {
   const { setAmount } = userContext();
 
 
-  const client = createAssemblyAIClient();
 
   const updateUserCredits = async (creditsToSubtract: number) => {
     try {
@@ -238,6 +237,9 @@ export default function Dashboard() {
   };
 
   const handleFileSelect = async (files: File[]) => {
+    const client = await createAssemblyAIClient();
+
+
     let processedFiles = 0;
     const dbResponses: AudioDBResponse[] = []; // Array to store database responses
     const cloudinaryResponses: CloudinaryResponse[] = []; // Array to store Cloudinary responses
