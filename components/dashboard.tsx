@@ -6,10 +6,10 @@ import TranscriptionView from '@/components/transcriptionview';
 import { toast, Toaster } from 'react-hot-toast';
 import { useAuth } from '@clerk/nextjs';
 import { Status } from '@/components/transcriptionhistory';
-import { AssemblyAI } from 'assemblyai';
 import { userContext } from '@/context/UserContext';
 import { User } from '@prisma/client';
 import { uploadToCloudinary } from '@/services/cloudinaryService';
+import { createAssemblyAIClient } from '@/services/assemblyAIService'; // Import the AssemblyAI service
 
 interface CloudinaryResponse {
   duration: number;
@@ -34,9 +34,7 @@ export default function Dashboard() {
   const { setAmount } = userContext();
 
 
-  const client = new AssemblyAI({
-    apiKey: process.env.NEXT_PUBLIC_ASSEMBLYAI_API_KEY || '',
-  });
+  const client = createAssemblyAIClient();
 
   const updateUserCredits = async (creditsToSubtract: number) => {
     try {
