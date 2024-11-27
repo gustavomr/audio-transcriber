@@ -9,8 +9,6 @@ import { Status } from '@/components/transcriptionhistory';
 import { userContext } from '@/context/UserContext';
 import { User } from '@prisma/client';
 import { uploadToCloudinary } from '@/services/cloudinaryService';
-import { createAssemblyAIClient } from '@/services/assemblyAIService'; // Import the AssemblyAI service
-
 interface CloudinaryResponse {
   duration: number;
   public_id: string;
@@ -51,7 +49,6 @@ export default function Dashboard() {
       });
 
       const credits = await response.json();
-      console.log('Credits', credits);
       setAmount(credits.amount)
   
       if (!response.ok) {
@@ -237,7 +234,9 @@ export default function Dashboard() {
   };
 
   const handleFileSelect = async (files: File[]) => {
-    const client = await createAssemblyAIClient();
+
+   // const client = await createAssemblyAIClient();
+   
 
 
     let processedFiles = 0;
@@ -301,7 +300,16 @@ export default function Dashboard() {
         const updatedDbResponse1 = await updateDatabase(dbResponse.id, "", "INPROGRESS");
         updateTranscriptionsList(updatedDbResponse1);
 
-        const transcript = await client.transcripts.transcribe(data);
+        //const transcript = await client.transcripts.transcribe(data);
+
+        //create for me a fecth with post
+        const transcriptResponse = await fetch('/api/transcribe', {
+          method: "POST",
+          body: JSON.stringify(data)
+        });
+
+
+        const transcript = await transcriptResponse.json();
 
         const updatedDbResponse2 = await updateDatabase(dbResponse.id, transcript?.text ? transcript?.text : "", "DONE");
         updateTranscriptionsList(updatedDbResponse2);
