@@ -1,10 +1,8 @@
 'use server';
 
-interface CloudinaryResponse {
-    duration: number;
-    public_id: string;
-    url: string;
-  }
+import { CloudinaryResponse } from "@/interfaces";
+
+
 export const uploadToCloudinary = async (file: File): Promise<CloudinaryResponse> => {
   const formData = new FormData();
   console.log("API",process.env.CLOUDINARY_API_KEY)

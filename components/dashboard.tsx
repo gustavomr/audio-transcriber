@@ -9,20 +9,10 @@ import { Status } from '@/components/transcriptionhistory';
 import { userContext } from '@/context/UserContext';
 import { User } from '@prisma/client';
 import { uploadToCloudinary } from '@/services/cloudinaryService';
-interface CloudinaryResponse {
-  duration: number;
-  public_id: string;
-  url: string;
-}
+import { AssemblyAIResponse, CloudinaryResponse } from '@/interfaces';
 
-interface AudioDBResponse {
-  id: number;
-  filename: string;
-  status: string;
-  createdAt: string;
-  url: string;
-  transcription: string;
-}
+
+
 
 export default function Dashboard() {
   const [selectedTranscription, setSelectedTranscription] = useState<Transcription | null>(null);
@@ -83,7 +73,7 @@ export default function Dashboard() {
   const saveToDatabase = async (
     filename: string,
     cloudinaryData: CloudinaryResponse,
-  ): Promise<AudioDBResponse> => {
+  ): Promise<AssemblyAIResponse> => {
     const body = JSON.stringify({
       filename,
       length: cloudinaryData.duration,
@@ -112,7 +102,7 @@ export default function Dashboard() {
     id: number,
     transcription: string,
     status: string
-  ): Promise<AudioDBResponse> => {
+  ): Promise<AssemblyAIResponse> => {
     const body = JSON.stringify({
       id,
       transcription,
@@ -138,7 +128,7 @@ export default function Dashboard() {
   
   
 
-  const updateTranscriptionsList = (dbResponse: AudioDBResponse) => {
+  const updateTranscriptionsList = (dbResponse: AssemblyAIResponse) => {
     setTranscriptions(prevTranscriptions => {
       // Find if transcription with this ID already exists
       const existingIndex = prevTranscriptions.findIndex(
@@ -240,7 +230,7 @@ export default function Dashboard() {
 
 
     let processedFiles = 0;
-    const dbResponses: AudioDBResponse[] = []; // Array to store database responses
+    const dbResponses: AssemblyAIResponse[] = []; // Array to store database responses
     const cloudinaryResponses: CloudinaryResponse[] = []; // Array to store Cloudinary responses
     setIsUploading(true);
     setProgress(10);
